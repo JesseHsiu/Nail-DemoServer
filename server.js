@@ -119,13 +119,13 @@ app.get('/trainning/start', function(req, res){
 
 app.get('/trainning/end', function(req, res){
   console.log("end:" + trainningPart.currentGesture + " / " + trainningPart.currentTime);
-  trainningPart.endOfrecording();
-  appStateMachine = stateMachine.IDLE;
-  // trainningPart.nextTask();
-  
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('_testcb(\'{"currentGesture": "'+ trainningPart.currentGesture +'", "finished" : "'+ trainningPart.finished +'"}\')');
-  
+  trainningPart.endOfrecording(function (argument) {
+    appStateMachine = stateMachine.IDLE;
+    // trainningPart.nextTask();
+    
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end('_testcb(\'{"currentGesture": "'+ trainningPart.currentGesture +'", "finished" : "'+ trainningPart.finished +'"}\')');
+  });
 });
 
 app.get('/trainning/buildmodel', function(req, res){
@@ -142,42 +142,55 @@ app.get('/trainning/reset', function(req, res){
 
 //Predict Functions
 app.get('/predict/start', function(req, res){
+  console.log("start");
   appStateMachine = stateMachine.DEMOING;
   res.writeHead(200, {'Content-Type': 'text/plain'});
   res.end('_testcb(\'{"message": "ok"}\')');
 });
 
 app.get('/predict/end', function(req, res){
+  console.log("end");
   appStateMachine = stateMachine.IDLE;
 
-  predictPart.endOfrecording();
-  var predictResult = predictPart.predictOnModel();
+  predictPart.endOfrecording(function (arguments) {
+    predictPart.predictOnModel(function (predictResult) {
+      console.log("results:" + predictResult);
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      res.end('_testcb(\'{"message": "'+ predictResult +'"}\')');
 
-  if (appControlThing != controlThing.NONE)
-  {
-    switch (int(predictResult))
-    {
-      case gestures.UP:
-        thingsToBeControlled[appControlThing].swipeUp();
-        break;
-      case gestures.RIGHT:
-        thingsToBeControlled[appControlThing].swipeRight();
-        break;
-      case gestures.DOWN:
-        thingsToBeControlled[appControlThing].swipeDown();
-        break;
-      case gestures.LEFT:
-        thingsToBeControlled[appControlThing].swipeLeft();
-        break;
-      case gestures.TAP:
-        thingsToBeControlled[appControlThing].tap();
-        break;
-      default:
-        break;
-    }
-  };
-  predictPart.clearDatas()
+      if (appControlThing != controlThing.NONE)
+      {
+        switch (int(predictResult))
+        {
+          case gestures.UP:
+            thingsToBeControlled[appControlThing].swipeUp();
+            break;
+          case gestures.RIGHT:
+            thingsToBeControlled[appControlThing].swipeRight();
+            break;
+          case gestures.DOWN:
+            thingsToBeControlled[appControlThing].swipeDown();
+            break;
+          case gestures.LEFT:
+            thingsToBeControlled[appControlThing].swipeLeft();
+            break;
+          case gestures.TAP:
+            thingsToBeControlled[appControlThing].tap();
+            break;
+          default:
+            break;
+        }
+      };
+      // predictPart.clearDatas();
 
+      
+    });
+  });
+  
+});
+
+app.get('/predict/reset', function(req, res){
+  predictPart.clearDatas();
   res.writeHead(200, {'Content-Type': 'text/plain'});
   res.end('_testcb(\'{"message": "ok"}\')');
 });

@@ -5,25 +5,44 @@ var csv = require("fast-csv");
 
 //==== storing data part --- Predict ====
 var predictPart ={
-  csvStream : csv.createWriteStream({headers: true}),
+  csvStream : null,
+  writableStream : null,
   SGsBase : app.locals.SGs,
   recordData: function(receivedString) {
     needToStoreData = receivedString.split(" ")
-    console.log(needToStoreData)
+    // console.log(needToStoreData)
 
-    this.csvStream = csv.createWriteStream({headers: true});
-    writableStream = fs.createWriteStream("./data/predict/predict.csv");
-    // writableStream.on("finish", function(){
-      // console.log("DONE!");
-    // });
+
+
+    if (this.writableStream === null)
+    {
+      this.writableStream = fs.createWriteStream("./data/predict/predict.csv");
+
+    };
+    
+    if (this.csvStream === null)
+    {
+      this.csvStream = csv.createWriteStream({headers: true});
+      this.csvStream.pipe(this.writableStream);
+    };
      
-    this.csvStream.pipe(writableStream);
+    
     // for (var i = 0; i < 100; i++) {
     this.csvStream.write({sg0: needToStoreData[1] - this.SGsBase.calibrationBase[0], sg2: needToStoreData[2] - this.SGsBase.calibrationBase[1], sg3: needToStoreData[3] - this.SGsBase.calibrationBase[2], sg4: needToStoreData[4] - this.SGsBase.calibrationBase[3], sg5: needToStoreData[5] - this.SGsBase.calibrationBase[4], sg6: needToStoreData[6] - this.SGsBase.calibrationBase[5], sg7: needToStoreData[7] - this.SGsBase.calibrationBase[6], sg8: needToStoreData[8] - this.SGsBase.calibrationBase[7], sg9: needToStoreData[9] - this.SGsBase.calibrationBase[8]});
+    
     // };
   },
-  endOfrecording: function () {
+  endOfrecording: function (callback) {
     this.csvStream.end();
+    var tmp = this;
+    this.csvStream.on("end", function(){
+      tmp.generateModel();
+      callback('ok');
+      tmp.csvStream = null;
+      tmp.writableStream = null;
+    });
+    
+
   },
   generateModel: function  () {
     shell.cd('data')
@@ -39,7 +58,7 @@ var predictPart ={
   },
 
 
-  predictOnModel: function () {
+  predictOnModel: function (callback) {
     shell.cd('data')
     shell.cd('mlFiles')
     shell.exec('svm-scale trainning.ml > trainning.ml.scale', {silent:true}).output;
@@ -53,9 +72,10 @@ var predictPart ={
         return -1;
       }
       data = data.split("\n");
-      resultOfML = data[0].replace(/\s/g, "X");
+      // console.log(data);
+      resultOfML = data[0];
 
-      return int(resultOfML);
+      callback(parseInt(resultOfML));
     });
   },
   clearDatas: function (argument) {

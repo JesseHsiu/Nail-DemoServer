@@ -42,30 +42,44 @@ var trainningPart ={
     needToStoreData = receivedString.split(" ")
     console.log(needToStoreData)
 
-    if (this.csvStream === null)
-    {
-      this.csvStream = csv.createWriteStream({headers: true});
-    };
+
 
     if (this.writableStream === null)
     {
       this.writableStream = fs.createWriteStream("./data/origin/T"+ this.currentTime + "_d"+ this.currentGesture  + ".csv")
     };
+
+    if (this.csvStream === null)
+    {
+      this.csvStream = csv.createWriteStream({headers: true});
+      this.csvStream.pipe(this.writableStream);
+    };
     
     // writableStream.on("finish", function(){
       // console.log("DONE!");
     // });
-    this.csvStream.pipe(this.writableStream);
+    
     // for (var i = 0; i < 100; i++) {
-    console.log("ok")
+    
     this.csvStream.write({sg0: needToStoreData[1] - this.SGsBase.calibrationBase[0], sg2: needToStoreData[2] - this.SGsBase.calibrationBase[1], sg3: needToStoreData[3] - this.SGsBase.calibrationBase[2], sg4: needToStoreData[4] - this.SGsBase.calibrationBase[3], sg5: needToStoreData[5] - this.SGsBase.calibrationBase[4], sg6: needToStoreData[6] - this.SGsBase.calibrationBase[5], sg7: needToStoreData[7] - this.SGsBase.calibrationBase[6], sg8: needToStoreData[8] - this.SGsBase.calibrationBase[7], sg9: needToStoreData[9] - this.SGsBase.calibrationBase[8]});
     // };
   },
-  endOfrecording: function () {
+  endOfrecording: function (callback) {
+    // this.csvStream.end();
+    // this.nextTask();
+    // this.writableStream = null;
+    // this.csvStream = null;
+
     this.csvStream.end();
-    this.nextTask();
-    this.writableStream = fs.createWriteStream("./data/origin/T"+ this.currentTime + "_d"+ this.currentGesture  + ".csv");
-    this.csvStream = csv.createWriteStream({headers: true});
+    var tmp = this;
+    this.csvStream.on("end", function(){
+      
+      tmp.nextTask();
+      tmp.csvStream = null;
+      tmp.writableStream = null;
+      callback('ok');
+    });
+
   },
 
   generateModel: function  () {
