@@ -8,7 +8,7 @@ var trainningPart ={
 
   csvStream : csv.createWriteStream({headers: true}),
   finished : false,
-  currentSwipe : 0,
+  currentGesture : 0,
   currentTime : 0,
   SGsBase : app.locals.SGs,
   // TODO: need to identify current swipe gesture, times.
@@ -17,13 +17,32 @@ var trainningPart ={
   // currentSwipe = 5
   // currentTime = 5
   // app.locals.SGs.calibrationBase = [1,1,1,1,1,1,1,1,1]
-  
+  nextTask: function () {
+    if (this.currentTime < 9)
+    {
+      this.currentTime++;
+      return;
+    }
+
+    if (this.currentGesture < 4)
+    {
+      this.currentGesture++;
+      this.currentTime = 0;
+      return;
+    }
+    else
+    {
+      this.finished = true;
+      return;
+    }
+
+  },
   recordData: function(receivedString) {
     needToStoreData = receivedString.split(" ")
     console.log(needToStoreData)
 
     this.csvStream = csv.createWriteStream({headers: true});
-    writableStream = fs.createWriteStream("./data/origin/T"+ this.currentTime + "_d"+ this.currentSwipe  + ".csv");
+    writableStream = fs.createWriteStream("./data/origin/T"+ this.currentTime + "_d"+ this.currentGesture  + ".csv");
     // writableStream.on("finish", function(){
       // console.log("DONE!");
     // });
@@ -49,7 +68,12 @@ var trainningPart ={
     shell.cd('..')
     shell.cd('..')
   },
-  clearDatas: function (argument) {
+  clearDatas: function () {
+
+    this.finished = false;
+    this.currentGesture = 0;
+    this.currentTime = 0;
+
     shell.rm('./data/origin/*.csv');
     shell.rm('./data/calculated/*.csv');
 
