@@ -11,6 +11,7 @@ module.exports = app;
 
 //==== Express Settings ====
 app.use( bodyParser.json() ); 
+app.use(express.static('public'));
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
@@ -118,7 +119,6 @@ var handlerForNewData = function(datas) {
         }
       };
       predictPart.clearDatas()
-      
     }
     else
     {
