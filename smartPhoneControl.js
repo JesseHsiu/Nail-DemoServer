@@ -2,7 +2,7 @@ var app = require('./server.js');
 var shell = require('shelljs');
 var fs = require('fs');
 var csv = require("fast-csv");
-var commandCenter = {
+var smartPhoneControl = {
   swipeUp: function () {
     
   },
@@ -20,4 +20,4 @@ var commandCenter = {
   },
 }
 
-module.exports = commandCenter;
+module.exports = smartPhoneControl;

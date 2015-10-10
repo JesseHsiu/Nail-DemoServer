@@ -27,12 +27,16 @@ app.locals.SGs = {
   calibrationBase : [1,1,1,1,1,1,1,1,1]
 } 
 
-
 //self made modules
 var trainningPart = require('./trainningPart.js');
 var predictPart = require('./predictPart.js');
-var commandCenter = require('./commandCenter.js');
 
+//controls Things
+var smartPhoneControl = require('./smartPhoneControl.js');
+var smartTVControl = require('./smartTVControl.js');
+var smartWatchControl = require('./smartWatchControl.js');
+
+var thingsToBeControlled = [smartTVControl,smartPhoneControl,smartWatchControl];
 
 //==== State Machine ====
 var stateMachine = {
@@ -42,10 +46,18 @@ var stateMachine = {
 };
 
 var controlThing = {
-  NONE: 0,
-  SMARTTV: 1,
-  PHONE: 2,
-  WATCH: 3,
+  NONE: -1,
+  SMARTTV: 0,
+  PHONE: 1,
+  WATCH: 2,
+};
+
+var gestures = {
+  UP: 0,
+  RIGHT: 1,
+  DOWN: 2,
+  LEFT: 3,
+  TAP: 4,
 };
 var appStateMachine = stateMachine.IDLE;
 var appControlThing = controlThing.NONE;
@@ -82,6 +94,30 @@ var handlerForNewData = function(datas) {
       predictPart.endOfrecording();
       var predictResult = predictPart.predictOnModel();
 
+      if (appControlThing != controlThing.NONE)
+      {
+        switch (int(predictResult))
+        {
+          case gestures.UP:
+            thingsToBeControlled[appControlThing].swipeUp();
+            break;
+          case gestures.RIGHT:
+            thingsToBeControlled[appControlThing].swipeRight();
+            break;
+          case gestures.DOWN:
+            thingsToBeControlled[appControlThing].swipeDown();
+            break;
+          case gestures.LEFT:
+            thingsToBeControlled[appControlThing].swipeLeft();
+            break;
+          case gestures.TAP:
+            thingsToBeControlled[appControlThing].tap();
+            break;
+          default:
+            break;
+        }
+      };
+      predictPart.clearDatas()
       
     }
     else

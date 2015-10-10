@@ -62,9 +62,9 @@ var predictPart ={
     shell.rm('./data/predict/*.csv');
     shell.rm('./data/calculated_p/*.csv');
 
-    shell.rm('./data/mlFiles/*.ml');
-    shell.rm('./data/mlFiles/*.predict');
-    shell.rm('./data/mlFiles/*.scale');
+    shell.rm('./data/mlFiles/predict.ml');
+    shell.rm('./data/mlFiles/predict.ml.scale');
+    shell.rm('./data/mlFiles/predict.ml.predict');
   },
 }
 
