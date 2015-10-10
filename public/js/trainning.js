@@ -1,18 +1,3 @@
-// $.ajax({
-//         url: 'http://127.0.0.1:3000/test',
-//         dataType: "jsonp",
-//         jsonpCallback: "_testcb",
-//         cache: false,
-//         timeout: 5000,
-//         success: function(data) {
-//             obj = JSON.parse(data);
-//             $("#test").append(obj.message);
-//         },
-//         error: function(jqXHR, textStatus, errorThrown) {
-//             alert('error ' + textStatus + " " + errorThrown);
-//         }
-//     });
-
 var currentGesture = 0;
 var trainningIsEnd = false;
 var gestures = {
@@ -54,12 +39,22 @@ function sendStart () {
         cache: false,
         timeout: 5000,
         success: function(data) {
+
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert('error ' + textStatus + " " + errorThrown);
         }
     });
 }
+
+function testAddData () {
+    $.post( "http://127.0.0.1:3000/", { datas: "0 10 11 12 13 14 15 16 17 18" } );
+}
+function testAddInitData () {
+    $.post( "http://127.0.0.1:3000/", { datas: "0 0 0 0 0 0 0 0 0 0" } );
+}
+
+
 
 function sendEnd () {
     $.ajax({
@@ -70,6 +65,7 @@ function sendEnd () {
         timeout: 5000,
         success: function(data) {
             obj = JSON.parse(data);
+            currentGesture = parseInt(obj.currentGesture)
             if (obj.finished === "true")
             {
                 $('#startTrainningBtn').addClass('disabled');
@@ -102,7 +98,7 @@ function buildModel () {
         cache: false,
         timeout: 5000,
         success: function(data) {
-            
+
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert('error ' + textStatus + " " + errorThrown);

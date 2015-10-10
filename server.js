@@ -78,19 +78,25 @@ var handlerForNewData = function(datas) {
   }
   else if (appStateMachine == stateMachine.RECORDING)
   {
-      trainningPart.recordData(datas);  
+    console.log(datas);
+    trainningPart.recordData(datas);  
   }
   else if (appStateMachine == stateMachine.DEMOING)
   {
-      predictPart.recordData(datas);
+    predictPart.recordData(datas);
   }
   
 };
 
 //received from linkit one.
 app.post('/', function(req, res) {
-  console.log(req.rawHeaders);
-  handlerForNewData(req.rawHeaders);
+  // console.log(req.rawHeaders);
+  // handlerForNewData(req.rawHeaders);
+  
+  handlerForNewData(req.body.datas)
+  // console.log(req.body.name)
+  // console.log(req.body.time)
+
   res.sendStatus(200);
 });
 
@@ -115,17 +121,11 @@ app.get('/trainning/end', function(req, res){
   console.log("end:" + trainningPart.currentGesture + " / " + trainningPart.currentTime);
   trainningPart.endOfrecording();
   appStateMachine = stateMachine.IDLE;
-  trainningPart.nextTask();
-  if (trainningPart.finished)
-  {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('_testcb(\'{"finished": "'+ trainningPart.finished+'", "nextDirection" : "'+ trainningPart.currentSwipe+'"}\')');
-  }
-  else
-  {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('_testcb(\'{"finished": "'+ trainningPart.finished+'", "nextDirection" : ""}\')');
-  }
+  // trainningPart.nextTask();
+  
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('_testcb(\'{"currentGesture": "'+ trainningPart.currentGesture +'", "finished" : "'+ trainningPart.finished +'"}\')');
+  
 });
 
 app.get('/trainning/buildmodel', function(req, res){

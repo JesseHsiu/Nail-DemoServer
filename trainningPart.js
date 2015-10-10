@@ -6,10 +6,11 @@ var csv = require("fast-csv");
 //==== storing data part --- Trainning ====
 var trainningPart ={
 
-  csvStream : csv.createWriteStream({headers: true}),
+  csvStream : null,
   finished : false,
   currentGesture : 0,
   currentTime : 0,
+  writableStream : null,
   SGsBase : app.locals.SGs,
   // TODO: need to identify current swipe gesture, times.
   // 
@@ -41,18 +42,30 @@ var trainningPart ={
     needToStoreData = receivedString.split(" ")
     console.log(needToStoreData)
 
-    this.csvStream = csv.createWriteStream({headers: true});
-    writableStream = fs.createWriteStream("./data/origin/T"+ this.currentTime + "_d"+ this.currentGesture  + ".csv");
+    if (this.csvStream === null)
+    {
+      this.csvStream = csv.createWriteStream({headers: true});
+    };
+
+    if (this.writableStream === null)
+    {
+      this.writableStream = fs.createWriteStream("./data/origin/T"+ this.currentTime + "_d"+ this.currentGesture  + ".csv")
+    };
+    
     // writableStream.on("finish", function(){
       // console.log("DONE!");
     // });
-    this.csvStream.pipe(writableStream);
+    this.csvStream.pipe(this.writableStream);
     // for (var i = 0; i < 100; i++) {
+    console.log("ok")
     this.csvStream.write({sg0: needToStoreData[1] - this.SGsBase.calibrationBase[0], sg2: needToStoreData[2] - this.SGsBase.calibrationBase[1], sg3: needToStoreData[3] - this.SGsBase.calibrationBase[2], sg4: needToStoreData[4] - this.SGsBase.calibrationBase[3], sg5: needToStoreData[5] - this.SGsBase.calibrationBase[4], sg6: needToStoreData[6] - this.SGsBase.calibrationBase[5], sg7: needToStoreData[7] - this.SGsBase.calibrationBase[6], sg8: needToStoreData[8] - this.SGsBase.calibrationBase[7], sg9: needToStoreData[9] - this.SGsBase.calibrationBase[8]});
     // };
   },
   endOfrecording: function () {
     this.csvStream.end();
+    this.nextTask();
+    this.writableStream = fs.createWriteStream("./data/origin/T"+ this.currentTime + "_d"+ this.currentGesture  + ".csv");
+    this.csvStream = csv.createWriteStream({headers: true});
   },
 
   generateModel: function  () {
