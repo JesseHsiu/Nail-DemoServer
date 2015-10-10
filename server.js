@@ -87,9 +87,6 @@ var handlerForNewData = function(datas) {
   
 };
 
-
-
-
 //received from linkit one.
 app.post('/', function(req, res) {
   console.log(req.rawHeaders);
@@ -101,23 +98,33 @@ app.post('/', function(req, res) {
 //received from webpages.
 
 //Tranning Functions
-app.get('/trainning/:direction/:times', function(req, res){
+
+app.get('/trainning/sync', function(req, res){
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('_testcb(\'{"currentGesture": "'+ trainningPart.currentGesture +'", "finished" : "'+ trainningPart.finished +'"}\')');
+});
+
+app.get('/trainning/start', function(req, res){
+  console.log("start");
   appStateMachine = stateMachine.RECORDING;
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('_testcb(\'{"currentGesture": "'+ trainningPart.currentGesture +'", "finished" : "'+ trainningPart.finished +'"}\')');
 });
 
 app.get('/trainning/end', function(req, res){
+  console.log("end:" + trainningPart.currentGesture + " / " + trainningPart.currentTime);
   trainningPart.endOfrecording();
   appStateMachine = stateMachine.IDLE;
   trainningPart.nextTask();
   if (trainningPart.finished)
   {
     res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('_testcb(\'{"message": "next", "nextDirection" : "'+ trainningPart.currentSwipe+'"}\')');
+    res.end('_testcb(\'{"finished": "'+ trainningPart.finished+'", "nextDirection" : "'+ trainningPart.currentSwipe+'"}\')');
   }
   else
   {
     res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('_testcb(\'{"message": "ok", "nextDirection" : ""}\')');
+    res.end('_testcb(\'{"finished": "'+ trainningPart.finished+'", "nextDirection" : ""}\')');
   }
 });
 
@@ -171,11 +178,6 @@ app.get('/predict/end', function(req, res){
   };
   predictPart.clearDatas()
 
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('_testcb(\'{"message": "ok"}\')');
-});
-
-app.get('/test', function(req, res){
   res.writeHead(200, {'Content-Type': 'text/plain'});
   res.end('_testcb(\'{"message": "ok"}\')');
 });
