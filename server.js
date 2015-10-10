@@ -6,8 +6,29 @@ var path = require('path');
 var shell = require('shelljs');
 var fs = require('fs');
 var csv = require("fast-csv");
+module.exports = app;
 
-//self made
+
+//==== Express Settings ====
+app.use( bodyParser.json() ); 
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
+
+// Web Interface. "ajax"
+app.get('/', function(req, res){
+   // res.render('index.html');
+   res.sendFile(__dirname + '/index.html');
+});
+
+app.listen(3000);
+//==== Global Variables ====
+app.locals.SGs = {
+  calibrationBase : [1,1,1,1,1,1,1,1,1]
+} 
+
+
+//self made modules
 var trainningPart = require('./trainningPart.js');
 var predictPart = require('./predictPart.js');
 var commandCenter = require('./commandCenter.js');
@@ -25,30 +46,8 @@ var controlThing = {
   PHONE: 2,
   WATCH: 3,
 };
-
-
 var appStateMachine = stateMachine.IDLE;
 var appControlThing = controlThing.NONE;
-
-
-//==== Express Settings ====
-app.use( bodyParser.json() ); 
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-  extended: true
-}));
-
-// Web Interface. "ajax"
-app.get('/', function(req, res){
-   // res.render('index.html');
-   res.sendFile(__dirname + '/index.html');
-});
-
-app.listen(3000);
-
-//==== Global Variables ====
-var SGs = {
-  calibrationBase : [1,1,1,1,1,1,1,1,1]
-} 
 
 // === GET SG VALUES PART ===
 
@@ -97,3 +96,5 @@ app.post('/', function(req, res) {
   handlerForNewData(req.rawHeaders);
   res.sendStatus(200);
 });
+
+

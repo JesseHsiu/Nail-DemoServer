@@ -2,10 +2,11 @@ var app = require('./server.js');
 var shell = require('shelljs');
 var fs = require('fs');
 var csv = require("fast-csv");
+
 //==== storing data part --- Predict ====
 var predictPart ={
   csvStream : csv.createWriteStream({headers: true}),
-
+  SGsBase : app.locals.SGs,
   recordData: function(receivedString) {
     needToStoreData = receivedString.split(" ")
     console.log(needToStoreData)
@@ -18,7 +19,7 @@ var predictPart ={
      
     this.csvStream.pipe(writableStream);
     // for (var i = 0; i < 100; i++) {
-    this.csvStream.write({sg0: needToStoreData[1] - SGs.calibrationBase[0], sg2: needToStoreData[2] - SGs.calibrationBase[1], sg3: needToStoreData[3] - SGs.calibrationBase[2], sg4: needToStoreData[4] - SGs.calibrationBase[3], sg5: needToStoreData[5] - SGs.calibrationBase[4], sg6: needToStoreData[6] - SGs.calibrationBase[5], sg7: needToStoreData[7] - SGs.calibrationBase[6], sg8: needToStoreData[8] - SGs.calibrationBase[7], sg9: needToStoreData[9] - SGs.calibrationBase[8]});
+    this.csvStream.write({sg0: needToStoreData[1] - this.SGsBase.calibrationBase[0], sg2: needToStoreData[2] - this.SGsBase.calibrationBase[1], sg3: needToStoreData[3] - this.SGsBase.calibrationBase[2], sg4: needToStoreData[4] - this.SGsBase.calibrationBase[3], sg5: needToStoreData[5] - this.SGsBase.calibrationBase[4], sg6: needToStoreData[6] - this.SGsBase.calibrationBase[5], sg7: needToStoreData[7] - this.SGsBase.calibrationBase[6], sg8: needToStoreData[8] - this.SGsBase.calibrationBase[7], sg9: needToStoreData[9] - this.SGsBase.calibrationBase[8]});
     // };
   },
   endOfrecording: function () {
@@ -61,3 +62,5 @@ var predictPart ={
     // body...
   },
 }
+
+module.exports = predictPart;

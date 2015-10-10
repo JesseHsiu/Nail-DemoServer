@@ -19,3 +19,5 @@ var commandCenter = {
     
   },
 }
+
+module.exports = commandCenter;
