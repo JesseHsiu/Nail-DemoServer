@@ -50,7 +50,12 @@ var trainningPart ={
     shell.cd('..')
   },
   clearDatas: function (argument) {
-    // body...
+    shell.rm('./data/origin/*.csv');
+    shell.rm('./data/calculated/*.csv');
+
+    shell.rm('./data/mlFiles/*.ml');
+    shell.rm('./data/mlFiles/*.predict');
+    shell.rm('./data/mlFiles/*.scale');
   }
 
 }

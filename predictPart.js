@@ -59,7 +59,12 @@ var predictPart ={
     });
   },
   clearDatas: function (argument) {
-    // body...
+    shell.rm('./data/predict/*.csv');
+    shell.rm('./data/calculated_p/*.csv');
+
+    shell.rm('./data/mlFiles/*.ml');
+    shell.rm('./data/mlFiles/*.predict');
+    shell.rm('./data/mlFiles/*.scale');
   },
 }
 

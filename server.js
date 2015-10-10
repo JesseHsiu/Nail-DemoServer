@@ -33,6 +33,7 @@ var trainningPart = require('./trainningPart.js');
 var predictPart = require('./predictPart.js');
 var commandCenter = require('./commandCenter.js');
 
+
 //==== State Machine ====
 var stateMachine = {
   IDLE: 0,
