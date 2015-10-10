@@ -14,7 +14,7 @@ for currentFile in files:
 	if "trainning" in currentFile:
 		y, x = svm.svm_read_problem(currentFile)
 		
-		yt, xt = svm.svm_read_problem('./needToPredict.ml.scale') 
+		yt, xt = svm.svm_read_problem('./predict.ml.scale') 
 
 		m = svm.svm_train(y, x, '-c 2 -g 0.0078125')
 		p_label, p_acc, p_val = svm.svm_predict(yt, xt, m)
@@ -22,7 +22,7 @@ for currentFile in files:
 		# csv.writer(csvfile, delimiter=',')
 		
 
-		with open('./needToPredict.ml.predict', 'wb') as f:
+		with open('./predict.ml.predict', 'wb') as f:
 			# writer = csv.writer(f,quoting=csv.QUOTE_NONE)
 			for label in p_label:
 				f.write(str(int(label)))
