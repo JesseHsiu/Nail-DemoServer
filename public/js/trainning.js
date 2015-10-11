@@ -33,7 +33,7 @@ function sendStart () {
         cache: false,
         timeout: 5000,
         success: function(data) {
-
+            $("#instructionAnimation").css("background-color", "red");
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert('error ' + textStatus + " " + errorThrown);
@@ -58,6 +58,7 @@ function sendEnd () {
         cache: false,
         timeout: 5000,
         success: function(data) {
+            $("#instructionAnimation").css("background-color", "green");
             updatesFromResponse(data);
         },
         error: function(jqXHR, textStatus, errorThrown) {
