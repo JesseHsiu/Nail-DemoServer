@@ -6,8 +6,9 @@ var gestures = {
   DOWN: 2,
   LEFT: 3,
   TAP: 4,
+  STOP: 5
 };
-var animationCSSName = ["animation-bottomUp", "animation-leftRight","animation-upBottom", "animation-rightLeft","animation-tap"];
+var animationCSSName = ["animation-bottomUp", "animation-leftRight","animation-upBottom", "animation-rightLeft","animation-tap","animation-stop"];
 
 $(document).ready(function() {
     $.ajax({

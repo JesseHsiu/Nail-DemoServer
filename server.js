@@ -25,7 +25,8 @@ app.get('/', function(req, res){
 app.listen(3000);
 //==== Global Variables ====
 app.locals.SGs = {
-  calibrationBase : [1,1,1,1,1,1,1,1,1]
+  calibrationBase : [1,1,1,1,1,1,1,1,1],
+  currentValue : [1,1,1,1,1,1,1,1,1]
 } 
 
 //self made modules
@@ -67,6 +68,12 @@ var appControlThing = controlThing.NONE;
 
 var handlerForNewData = function(datas) {
 
+  //TODO - DEBUG ONLY
+  var storeDataToArray = datas.split(" ")
+  for (var i = 1; i <= 9; i++) {
+    app.locals.SGs.currentValue[i-1] = parseInt(storeDataToArray[i]);
+  };
+  
   //! update calibration first
   //! endofTheInput
 
@@ -101,7 +108,15 @@ app.post('/', function(req, res) {
 });
 
 
+
 //received from webpages.
+
+
+
+app.get('/SGValues', function(req, res){
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('_SGValues(\'{"values": "'+ app.locals.SGs.currentValue + '"}\')');
+});
 
 //Tranning Functions
 
