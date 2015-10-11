@@ -68,6 +68,9 @@ function sendEnd () {
 }
 
 function startTrainning () {
+    if ($('#startTrainningBtn').hasClass('disabled')) {
+        return;
+    };
     if ($('#startTrainningBtn').hasClass('active') == false)
     {
         $('#startTrainningBtn').addClass('active');
@@ -81,6 +84,9 @@ function startTrainning () {
 }
 
 function buildModel () {
+    if ($('#buildModel').hasClass('disabled')) {
+        return;
+    };
     $.ajax({
         url: 'http://127.0.0.1:3000/trainning/buildmodel',
         dataType: "jsonp",
@@ -88,7 +94,7 @@ function buildModel () {
         cache: false,
         timeout: 5000,
         success: function(data) {
-
+            $('#buildModel').addClass('disabled');
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert('error ' + textStatus + " " + errorThrown);
@@ -104,7 +110,22 @@ function clearData () {
         cache: false,
         timeout: 5000,
         success: function(data) {
-            
+            $.ajax({
+                url: 'http://127.0.0.1:3000/trainning/sync',
+                dataType: "jsonp",
+                jsonpCallback: "_testcb",
+                cache: false,
+                timeout: 5000,
+                success: function(data) {
+                    updatesFromResponse(data);
+                    if ($('#buildModel').hasClass('disabled')) {
+                        $('#buildModel').removeClass('disabled');
+                    };
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('error ' + textStatus + " " + errorThrown);
+                }
+            });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert('error ' + textStatus + " " + errorThrown);
