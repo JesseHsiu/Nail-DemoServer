@@ -56,12 +56,17 @@
 
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
-        <h1>Demo</h1>
+        <h1>Demo Page</h1>
         <button id="startDemoBtn" type="button" class="btn btn-default btn-lg" onclick="startGesture()">Start Gesture</button>
         <button id="clearData" type="button" class="btn btn-danger btn-lg" onclick="clearData()">Delete Current Data</button>
         <button id="testAddData" type="button" class="btn btn-default btn-lg" onclick="testAddData()">Data</button>
         <button id="testAddInitData" type="button" class="btn btn-default btn-lg" onclick="testAddInitData()">InitData</button>
-
+        <div class="row" style="margin-top: 30px">
+          <div class="col-xs-5" id="result">
+            
+          </div>
+          <div class="col-xs-7" id="plotArea"></div>
+        </div>
       </div>
 
     </div> <!-- /container -->
@@ -74,5 +79,66 @@
     <script src="./js/d3.v3.min.js"></script>
     <script src="./js/plotly.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/demo.js"></script>
+    <script type="text/javascript">
+      var data = [
+          {
+            x: ['sg1', 'sg2', 'sg3', 'sg4', 'sg5', 'sg6', 'sg7', 'sg8', 'sg9'],
+            y: [500,500,500,500,500,500,500,500,500,500],
+            type: 'bar',
+            marker: {
+              color: 'rgba(1,1,1,0.0)'
+            }
+            // marker:{
+            //   color: ['rgba(204,204,204,1)', 'rgba(222,45,38,0.8)', 'rgba(204,204,204,1)', 'rgba(204,204,204,1)', 'rgba(204,204,204,1)']
+            // },
+          },
+          {
+            x: ['sg1', 'sg2', 'sg3', 'sg4', 'sg5', 'sg6', 'sg7', 'sg8', 'sg9'],
+            y: [0,0,0,0,0,0,0,0,0,0],
+            type: 'bar'
+            // marker:{
+            //   color: ['rgba(204,204,204,1)', 'rgba(222,45,38,0.8)', 'rgba(204,204,204,1)', 'rgba(204,204,204,1)', 'rgba(204,204,204,1)']
+            // },
+          }
+        ];
+        var layout = {
+          width: 600,
+          height: 600,
+          barmode: 'stack',
+          yaxis:{
+            range:[
+              0,
+             1024
+            ],
+            type:"linear",
+            autorange:false,
+            fixedrange:true,
+            tickmode:"linear",
+            dtick:100,
+            ticks:""
+          },
+          showlegend:false,
+          margin:{
+            t:10,
+            b:40,
+            l:40,
+            r:20
+          }
+        };
+        window.setInterval(function(){
+
+          data[1].y[0] =Math.floor((Math.random() * 1000) - 500);
+          data[1].y[1] =Math.floor((Math.random() * 1000) - 500);
+          data[1].y[2] =Math.floor((Math.random() * 1000) - 500);
+          data[1].y[3] =Math.floor((Math.random() * 1000) - 500);
+          data[1].y[4] =Math.floor((Math.random() * 1000) - 500);
+          data[1].y[5] =Math.floor((Math.random() * 1000) - 500);
+          data[1].y[6] =Math.floor((Math.random() * 1000) - 500);
+          data[1].y[7] =Math.floor((Math.random() * 1000) - 500);
+          data[1].y[8] =Math.floor((Math.random() * 1000) - 500);
+          Plotly.newPlot('plotArea', data, layout);
+        }, 100);
+    </script>
   </body>
 </html>

@@ -19,16 +19,18 @@ var trainningPart ={
   // currentTime = 5
   // app.locals.SGs.calibrationBase = [1,1,1,1,1,1,1,1,1]
   nextTask: function () {
-    if (this.currentTime < 9)
-    {
-      this.currentTime++;
-      return;
-    }
-
+    
     if (this.currentGesture < 4)
     {
       this.currentGesture++;
-      this.currentTime = 0;
+      
+      return;
+    }
+
+    if (this.currentTime < 9)
+    {
+      this.currentTime++;
+      this.currentGesture = 0;
       return;
     }
     else

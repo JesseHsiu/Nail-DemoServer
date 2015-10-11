@@ -7,6 +7,7 @@ var gestures = {
   LEFT: 3,
   TAP: 4,
 };
+var animationCSSName = ["animation-bottomUp", "animation-leftRight","animation-upBottom", "animation-rightLeft","animation-tap"];
 
 $(document).ready(function() {
     $.ajax({
@@ -16,14 +17,7 @@ $(document).ready(function() {
         cache: false,
         timeout: 5000,
         success: function(data) {
-            obj = JSON.parse(data);
-            console.log(Boolean(obj.finished))
-            currentGesture = parseInt(obj.currentGesture)
-
-            if (obj.finished === "true")
-            {
-                $('#startTrainningBtn').addClass('disabled');
-            };
+            updatesFromResponse(data);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert('error ' + textStatus + " " + errorThrown);
@@ -64,12 +58,7 @@ function sendEnd () {
         cache: false,
         timeout: 5000,
         success: function(data) {
-            obj = JSON.parse(data);
-            currentGesture = parseInt(obj.currentGesture)
-            if (obj.finished === "true")
-            {
-                $('#startTrainningBtn').addClass('disabled');
-            };
+            updatesFromResponse(data);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert('error ' + textStatus + " " + errorThrown);
@@ -120,6 +109,40 @@ function clearData () {
             alert('error ' + textStatus + " " + errorThrown);
         }
     });
+}
+
+function updatesFromResponse (data) {
+    obj = JSON.parse(data);
+    console.log(Boolean(obj.finished))
+    currentGesture = parseInt(obj.currentGesture);
+    $("#instructionAnimation").removeClass();
+    $("#instructionAnimation").addClass(animationCSSName[currentGesture]);
+
+    switch(currentGesture)
+    {
+        case gestures.UP:
+            $("#instructionText").text("Please Swipe Up").css('text-align','center');
+            break;
+        case gestures.RIGHT:
+            $("#instructionText").text("Please Swipe Right").css('text-align','center');
+            break;
+        case gestures.DOWN:
+            $("#instructionText").text("Please Swipe Down").css('text-align','center');
+            break;
+        case gestures.LEFT:
+            $("#instructionText").text("Please Swipe Left").css('text-align','center');
+            break;
+        case gestures.TAP:
+            $("#instructionText").text("Please Just Tap").css('text-align','center');
+            break;
+        default:
+            break;
+    }
+
+    if (obj.finished === "true")
+    {
+        $('#startTrainningBtn').addClass('disabled');
+    };
 }
 
 

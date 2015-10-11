@@ -15,6 +15,7 @@
 
     <!-- Custom styles for this template -->
     <link href="./css/navbar-fixed-top.css" rel="stylesheet">
+    <link href="./css/animations.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -56,16 +57,31 @@
 
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
-        <h1>Trainning</h1>
+        <h1>Trainning Part</h1>
+
         <button id="startTrainningBtn" type="button" class="btn btn-default btn-lg" onclick="startTrainning()">Start Trainning</button>
         <button id="buildModel" type="button" class="btn btn-success btn-lg" onclick="buildModel()">Build Model</button>
         <button id="clearData" type="button" class="btn btn-danger btn-lg" onclick="clearData()">Delete Current Model</button>
         <button id="testAddData" type="button" class="btn btn-default btn-lg" onclick="testAddData()">Data</button>
         <button id="testAddInitData" type="button" class="btn btn-default btn-lg" onclick="testAddInitData()">InitData</button>
+
+        <div class="row" style="margin-top: 30px">
+          <div class="col-xs-5 instruct">
+            <p style="text-align: center"><strong>Instruction For Now</strong></p>
+            <p id="instructionText" style="padding-bottom: 50%">Please wait For Instruction</p>
+            <div id="instructionAnimation" class="" style="background: green;"></div>
+          </div>
+          <div class="col-xs-7" id="plotArea"></div>
+        </div>
       </div>
 
-    </div> <!-- /container -->
+      
 
+    </div> <!-- /container -->
+    <!-- <div id="result" style="width=600px, height=410px">
+      <div class="animation-target" style=""></div>
+    </div> -->
+    <!-- <div class="animation-target"></div> -->
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -74,5 +90,66 @@
     <script src="./js/d3.v3.min.js"></script>
     <script src="./js/plotly.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/trainning.js"></script>
+    <script type="text/javascript">
+      var data = [
+          {
+            x: ['sg1', 'sg2', 'sg3', 'sg4', 'sg5', 'sg6', 'sg7', 'sg8', 'sg9'],
+            y: [500,500,500,500,500,500,500,500,500,500],
+            type: 'bar',
+            marker: {
+              color: 'rgba(1,1,1,0.0)'
+            }
+            // marker:{
+            //   color: ['rgba(204,204,204,1)', 'rgba(222,45,38,0.8)', 'rgba(204,204,204,1)', 'rgba(204,204,204,1)', 'rgba(204,204,204,1)']
+            // },
+          },
+          {
+            x: ['sg1', 'sg2', 'sg3', 'sg4', 'sg5', 'sg6', 'sg7', 'sg8', 'sg9'],
+            y: [0,0,0,0,0,0,0,0,0,0],
+            type: 'bar'
+            // marker:{
+            //   color: ['rgba(204,204,204,1)', 'rgba(222,45,38,0.8)', 'rgba(204,204,204,1)', 'rgba(204,204,204,1)', 'rgba(204,204,204,1)']
+            // },
+          }
+        ];
+        var layout = {
+          width: 600,
+          height: 600,
+          barmode: 'stack',
+          yaxis:{
+            range:[
+              0,
+             1024
+            ],
+            type:"linear",
+            autorange:false,
+            fixedrange:true,
+            tickmode:"linear",
+            dtick:100,
+            ticks:""
+          },
+          showlegend:false,
+          margin:{
+            t:10,
+            b:40,
+            l:40,
+            r:20
+          }
+        };
+        window.setInterval(function(){
+
+          data[1].y[0] =Math.floor((Math.random() * 1000) - 500);
+          data[1].y[1] =Math.floor((Math.random() * 1000) - 500);
+          data[1].y[2] =Math.floor((Math.random() * 1000) - 500);
+          data[1].y[3] =Math.floor((Math.random() * 1000) - 500);
+          data[1].y[4] =Math.floor((Math.random() * 1000) - 500);
+          data[1].y[5] =Math.floor((Math.random() * 1000) - 500);
+          data[1].y[6] =Math.floor((Math.random() * 1000) - 500);
+          data[1].y[7] =Math.floor((Math.random() * 1000) - 500);
+          data[1].y[8] =Math.floor((Math.random() * 1000) - 500);
+          Plotly.newPlot('plotArea', data, layout);
+        }, 100);
+    </script>
   </body>
 </html>
