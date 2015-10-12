@@ -210,3 +210,54 @@ app.get('/predict/reset', function(req, res){
   res.end('_testcb(\'{"message": "ok"}\')');
 });
 
+app.get('/demoDevice/:device',function (req, res) {
+  console.log(req.params.device);
+  switch (parseInt(req.params.device))
+  {
+    case controlThing.NONE:
+      appControlThing = controlThing.NONE;
+      break;
+    case controlThing.SMARTTV:
+      appControlThing = controlThing.SMARTTV;
+      break;
+    case controlThing.PHONE:
+      appControlThing = controlThing.PHONE;
+      break;
+    case controlThing.WATCH:
+      appControlThing = controlThing.WATCH;
+      break;
+  }
+  
+});
+
+app.get('/demo/:gesture',function (req, res) {
+  console.log("gesture: " + req.params.gesture);
+
+  if (appControlThing != controlThing.NONE)
+  {
+    switch (parseInt(req.params.gesture))
+    {
+      case gestures.UP:
+        thingsToBeControlled[appControlThing].swipeUp();
+        break;
+      case gestures.RIGHT:
+        thingsToBeControlled[appControlThing].swipeRight();
+        break;
+      case gestures.DOWN:
+        thingsToBeControlled[appControlThing].swipeDown();
+        break;
+      case gestures.LEFT:
+        thingsToBeControlled[appControlThing].swipeLeft();
+        break;
+      case gestures.TAP:
+        thingsToBeControlled[appControlThing].tap();
+        break;
+      default:
+        break;
+    }
+  };
+
+
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('_testcb(\'{"message": "ok"}\')');
+});

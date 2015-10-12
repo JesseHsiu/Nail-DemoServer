@@ -120,3 +120,127 @@ function updatesFromResponse (data) {
         $("#instructionAnimation").addClass(animationCSSName[gestures.STOP]);
     }, 5000);
 }
+
+function upTest () {
+    $.ajax({
+        url: 'http://127.0.0.1:3000/demo/0',
+        dataType: "jsonp",
+        jsonpCallback: "_testcb",
+        cache: false,
+        timeout: 5000,
+        success: function(data) {
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+        }
+    });
+}
+
+function rightTest () {
+    $.ajax({
+        url: 'http://127.0.0.1:3000/demo/1',
+        dataType: "jsonp",
+        jsonpCallback: "_testcb",
+        cache: false,
+        timeout: 5000,
+        success: function(data) {
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+        }
+    });
+}
+
+function downTest () {
+    $.ajax({
+        url: 'http://127.0.0.1:3000/demo/2',
+        dataType: "jsonp",
+        jsonpCallback: "_testcb",
+        cache: false,
+        timeout: 5000,
+        success: function(data) {
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+        }
+    });
+}
+
+function leftTest () {
+    $.ajax({
+        url: 'http://127.0.0.1:3000/demo/3',
+        dataType: "jsonp",
+        jsonpCallback: "_testcb",
+        cache: false,
+        timeout: 5000,
+        success: function(data) {
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+        }
+    });
+}
+
+function tapTest () {
+    $.ajax({
+        url: 'http://127.0.0.1:3000/demo/4',
+        dataType: "jsonp",
+        jsonpCallback: "_testcb",
+        cache: false,
+        timeout: 5000,
+        success: function(data) {
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+        }
+    });
+}
+
+
+function demoDeviceNone(){
+    $.ajax({
+        url: 'http://127.0.0.1:3000/demoDevice/-1',
+        dataType: "jsonp",
+        jsonpCallback: "_testcb",
+        cache: false,
+        timeout: 5000,
+        success: function(data) {
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+        }
+    });
+}
+function demoDeviceTV(){
+    $.ajax({
+        url: 'http://127.0.0.1:3000/demoDevice/0',
+        dataType: "jsonp",
+        jsonpCallback: "_testcb",
+        cache: false,
+        timeout: 5000,
+        success: function(data) {
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+        }
+    });
+}
+function demoDeviceWatch(){
+    $.ajax({
+        url: 'http://127.0.0.1:3000/demoDevice/1',
+        dataType: "jsonp",
+        jsonpCallback: "_testcb",
+        cache: false,
+        timeout: 5000,
+        success: function(data) {
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+        }
+    });
+}
+function demoDevicePhone(){
+    $.ajax({
+        url: 'http://127.0.0.1:3000/demoDevice/2',
+        dataType: "jsonp",
+        jsonpCallback: "_testcb",
+        cache: false,
+        timeout: 5000,
+        success: function(data) {
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+        }
+    });
+}
