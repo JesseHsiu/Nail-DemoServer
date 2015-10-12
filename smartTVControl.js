@@ -29,6 +29,8 @@ var smartTVControl = {
       'msg' : gesture
     });
 
+    // console.log("postData:" + postData + " length:"+ postData.length);
+
     var options = {
       hostname: remoteIPAddress,
       port: portNumber,

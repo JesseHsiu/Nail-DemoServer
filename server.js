@@ -175,7 +175,7 @@ app.get('/predict/end', function(req, res){
 
       if (appControlThing != controlThing.NONE)
       {
-        switch (int(predictResult))
+        switch (parseInt(predictResult))
         {
           case gestures.UP:
             thingsToBeControlled[appControlThing].swipeUp();
