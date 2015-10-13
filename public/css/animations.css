@@ -4,7 +4,7 @@
 }
 
 .animation-leftRight {
-  animation: animation-leftRight 1000ms linear infinite both;
+  animation: animation-leftRight 5000ms linear infinite both;
   width:60px;
   height:60px;
   -moz-border-radius:30px;
@@ -28,7 +28,7 @@
 
 
 .animation-rightLeft {
-  animation: animation-rightLeft 1000ms linear infinite both;
+  animation: animation-rightLeft 5000ms linear infinite both;
   width:60px;
   height:60px;
   -moz-border-radius:30px;
@@ -50,7 +50,7 @@
 
 
 .animation-bottomUp {
-  animation: animation-bottomUp 1000ms linear infinite both;
+  animation: animation-bottomUp 5000ms linear infinite both;
   width:60px;
   height:60px;
   -moz-border-radius:30px;
@@ -71,7 +71,7 @@
 }
 
 .animation-upBottom {
-  animation: animation-upBottom 1000ms linear infinite both;
+  animation: animation-upBottom 5000ms linear infinite both;
   width:60px;
   height:60px;
   -moz-border-radius:30px;
@@ -92,7 +92,7 @@
 }
 
 .animation-tap {
-  animation: animation-tap 2000ms linear infinite both;
+  animation: animation-tap 5000ms linear infinite both;
   width:60px;
   height:60px;
   -moz-border-radius:30px;

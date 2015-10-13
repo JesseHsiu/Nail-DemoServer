@@ -244,7 +244,7 @@ function demoDeviceTV(){
 }
 function demoDeviceWatch(){
     $.ajax({
-        url: 'http://127.0.0.1:3000/demoDevice/1',
+        url: 'http://127.0.0.1:3000/demoDevice/2',
         dataType: "jsonp",
         jsonpCallback: "_testcb",
         cache: false,
@@ -257,7 +257,7 @@ function demoDeviceWatch(){
 }
 function demoDevicePhone(){
     $.ajax({
-        url: 'http://127.0.0.1:3000/demoDevice/2',
+        url: 'http://127.0.0.1:3000/demoDevice/1',
         dataType: "jsonp",
         jsonpCallback: "_testcb",
         cache: false,

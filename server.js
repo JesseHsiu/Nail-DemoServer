@@ -228,6 +228,20 @@ app.get('/predict/reset', function(req, res){
 });
 
 app.get('/demoDevice/:device',function (req, res) {
+  if (parseInt(req.params.device) === appControlThing)
+  {
+    return;
+  }
+  if (appControlThing === controlThing.PHONE)
+  {
+    smartPhoneControl.disconnect();
+  };
+
+  if (appControlThing === controlThing.WATCH)
+  {
+    smartWatchControl.disconnect();
+  };
+
   console.log(req.params.device);
   switch (parseInt(req.params.device))
   {
@@ -239,9 +253,12 @@ app.get('/demoDevice/:device',function (req, res) {
       break;
     case controlThing.PHONE:
       appControlThing = controlThing.PHONE;
+      console.log("hah");
+      smartPhoneControl.connect();
       break;
     case controlThing.WATCH:
       appControlThing = controlThing.WATCH;
+      smartWatchControl.connect();
       break;
   }
   
