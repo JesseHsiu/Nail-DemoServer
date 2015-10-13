@@ -10,11 +10,11 @@ module.exports = app;
 
 
 //==== Express Settings ====
-app.use( bodyParser.json() ); 
+// app.use( bodyParser.json() ); 
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-  extended: true
-}));
+// app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+//   extended: true
+// }));
 
 // Web Interface. "ajax"
 app.get('/', function(req, res){
@@ -25,7 +25,7 @@ app.get('/', function(req, res){
 app.listen(3000);
 //==== Global Variables ====
 app.locals.SGs = {
-  calibrationBase : [1,1,1,1,1,1,1,1,1],
+  calibrationBase : [500,500,500,500,500,500,500,500,500],//500,500,500,500,500,500,500,500,500
   currentValue : [1,1,1,1,1,1,1,1,1]
 } 
 
@@ -67,62 +67,73 @@ var appControlThing = controlThing.NONE;
 // === GET SG VALUES PART ===
 
 var handlerForNewData = function(datas) {
-
+  // console.log(datas);
   //TODO - DEBUG ONLY
-  var storeDataToArray = datas.split(" ")
-  for (var i = 1; i <= 9; i++) {
-    app.locals.SGs.currentValue[i-1] = parseInt(storeDataToArray[i]);
+  var storeDataToArray = datas.split(" ");
+  // console.log(storeDataToArray);
+  if (storeDataToArray.length == 11)
+  {
+    for (var i = 1; i <= 9; i++) {
+      app.locals.SGs.currentValue[i-1] = parseInt(storeDataToArray[i]);
+    };
+    var endOfInput = false;
+
+    if (appStateMachine == stateMachine.IDLE)
+    {
+      return;
+    }
+    else if (appStateMachine == stateMachine.RECORDING)
+    {
+      console.log(datas);
+      trainningPart.recordData(datas);  
+    }
+    else if (appStateMachine == stateMachine.DEMOING)
+    {
+      predictPart.recordData(datas);
+    }
+
   };
   
   //! update calibration first
   //! endofTheInput
 
-  var endOfInput = false;
-
-  if (appStateMachine == stateMachine.IDLE)
-  {
-    return;
-  }
-  else if (appStateMachine == stateMachine.RECORDING)
-  {
-    console.log(datas);
-    trainningPart.recordData(datas);  
-  }
-  else if (appStateMachine == stateMachine.DEMOING)
-  {
-    predictPart.recordData(datas);
-  }
+  
   
 };
 
 //received from linkit one.
 app.post('/', function(req, res) {
+  console.log(app.locals.SGs.currentValue);
   // console.log(req.rawHeaders);
-  // handlerForNewData(req.rawHeaders);
-  
-  handlerForNewData(req.body.datas)
+  handlerForNewData(req.headers.host);
+  // console.log(req.headers.host);
+  // handlerForNewData()
   // console.log(req.body.name)
   // console.log(req.body.time)
 
-  res.sendStatus(200);
+  // res.sendStatus(200);
 });
 
 
 
 //received from webpages.
 
-
-
 app.get('/SGValues', function(req, res){
   res.writeHead(200, {'Content-Type': 'text/plain'});
   res.end('_SGValues(\'{"values": "'+ app.locals.SGs.currentValue + '"}\')');
+});
+
+app.get('/baseSet', function(req, res){
+  app.locals.SGs.calibrationBase = app.locals.SGs.currentValue;
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end();
 });
 
 //Tranning Functions
 
 app.get('/trainning/sync', function(req, res){
   res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('_testcb(\'{"currentGesture": "'+ trainningPart.currentGesture +'", "finished" : "'+ trainningPart.finished +'"}\')');
+  res.end('_testcb(\'{"currentGesture": "'+ trainningPart.currentGesture +'", "finished" : "'+ trainningPart.finished +'", "calibrationBase" : "'+ app.locals.SGs.calibrationBase +'"}\')');
 });
 
 app.get('/trainning/start', function(req, res){
@@ -156,6 +167,12 @@ app.get('/trainning/reset', function(req, res){
 });
 
 //Predict Functions
+
+app.get('/predict/sync', function(req, res){
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('_testcb(\'{"currentGesture": "'+ trainningPart.currentGesture +'", "finished" : "'+ trainningPart.finished +'", "calibrationBase" : "'+ app.locals.SGs.calibrationBase +'"}\')');
+});
+
 app.get('/predict/start', function(req, res){
   console.log("start");
   appStateMachine = stateMachine.DEMOING;
@@ -196,7 +213,7 @@ app.get('/predict/end', function(req, res){
             break;
         }
       };
-      // predictPart.clearDatas();
+      predictPart.clearDatas();
 
       
     });

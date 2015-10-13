@@ -26,7 +26,7 @@ def construct_line( label, line ):
 def csv2libsvm(input_file, output_file):
 
 	label_index = 18
-	skip_headers = True
+	skip_headers = False
 
 	i = open( input_file, 'rb' )
 	o = open( output_file, 'wb' )

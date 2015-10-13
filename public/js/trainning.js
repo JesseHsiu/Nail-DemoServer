@@ -166,6 +166,12 @@ function updatesFromResponse (data) {
     {
         $('#startTrainningBtn').addClass('disabled');
     };
+    if (obj.calibrationBase != undefined)
+    {
+        setShowingBase(obj.calibrationBase);    
+    };
+    
+
 }
 
 

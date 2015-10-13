@@ -57,15 +57,15 @@ window.setInterval(function(){
         var values = obj.values.split(",");
         // console.log(values[0])
           // updatesFromResponse(data);
-        plotdata[1].y[0] = parseInt(values[0]);
-        plotdata[1].y[1] = parseInt(values[1]);
-        plotdata[1].y[2] = parseInt(values[2]);
-        plotdata[1].y[3] = parseInt(values[3]);
-        plotdata[1].y[4] = parseInt(values[4]);
-        plotdata[1].y[5] = parseInt(values[5]);
-        plotdata[1].y[6] = parseInt(values[6]);
-        plotdata[1].y[7] = parseInt(values[7]);
-        plotdata[1].y[8] = parseInt(values[8]);
+        plotdata[1].y[0] = parseInt(values[0]) - plotdata[0].y[0];//- plotdata[0].y[0]
+        plotdata[1].y[1] = parseInt(values[1]) - plotdata[0].y[1];//- plotdata[0].y[1]
+        plotdata[1].y[2] = parseInt(values[2]) - plotdata[0].y[2];//- plotdata[0].y[2]
+        plotdata[1].y[3] = parseInt(values[3]) - plotdata[0].y[3];//- plotdata[0].y[3]
+        plotdata[1].y[4] = parseInt(values[4]) - plotdata[0].y[4];//- plotdata[0].y[4]
+        plotdata[1].y[5] = parseInt(values[5]) - plotdata[0].y[5];//- plotdata[0].y[5]
+        plotdata[1].y[6] = parseInt(values[6]) - plotdata[0].y[6];//- plotdata[0].y[6]
+        plotdata[1].y[7] = parseInt(values[7]) - plotdata[0].y[7];//- plotdata[0].y[7]
+        plotdata[1].y[8] = parseInt(values[8]) - plotdata[0].y[8];//- plotdata[0].y[8]
         Plotly.newPlot('plotArea', plotdata, layout);
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -73,3 +73,32 @@ window.setInterval(function(){
       }
   });
 }, 100);
+
+function setBase () {
+  for (var i = 0; i < 9; i++) {
+    plotdata[0].y[i] = plotdata[0].y[i] + plotdata[1].y[i];
+  };
+
+  $.ajax({
+        url: 'http://127.0.0.1:3000/baseSet',
+        dataType: "jsonp",
+        jsonpCallback: "_testcb",
+        cache: false,
+        timeout: 5000,
+        success: function(data) {
+          
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // alert('error ' + textStatus + " " + errorThrown);
+        }
+  });
+}
+
+function setShowingBase (argument) {
+  
+  var storeDataToArray = argument.split(",");
+  for (var i = 0; i < 9; i++) {
+    plotdata[0].y[i] = parseInt(storeDataToArray[i]);
+  };
+  // console.log(plotdata[0]);
+}

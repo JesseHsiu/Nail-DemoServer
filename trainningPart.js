@@ -11,7 +11,7 @@ var trainningPart ={
   currentGesture : 0,
   currentTime : 0,
   writableStream : null,
-  SGsBase : app.locals.SGs,
+  SGsBase : app.locals.SGs.calibrationBase,
   // TODO: need to identify current swipe gesture, times.
   // 
   // var receivedString = "0 10 11 12 13 14 15 16 17 18"
@@ -63,7 +63,7 @@ var trainningPart ={
     
     // for (var i = 0; i < 100; i++) {
     
-    this.csvStream.write({sg0: needToStoreData[1] - this.SGsBase.calibrationBase[0], sg2: needToStoreData[2] - this.SGsBase.calibrationBase[1], sg3: needToStoreData[3] - this.SGsBase.calibrationBase[2], sg4: needToStoreData[4] - this.SGsBase.calibrationBase[3], sg5: needToStoreData[5] - this.SGsBase.calibrationBase[4], sg6: needToStoreData[6] - this.SGsBase.calibrationBase[5], sg7: needToStoreData[7] - this.SGsBase.calibrationBase[6], sg8: needToStoreData[8] - this.SGsBase.calibrationBase[7], sg9: needToStoreData[9] - this.SGsBase.calibrationBase[8]});
+    this.csvStream.write({sg0: needToStoreData[1] - this.SGsBase[0], sg2: needToStoreData[2] - this.SGsBase[1], sg3: needToStoreData[3] - this.SGsBase[2], sg4: needToStoreData[4] - this.SGsBase[3], sg5: needToStoreData[5] - this.SGsBase[4], sg6: needToStoreData[6] - this.SGsBase[5], sg7: needToStoreData[7] - this.SGsBase[6], sg8: needToStoreData[8] - this.SGsBase[7], sg9: needToStoreData[9] - this.SGsBase[8]});
     // };
   },
   endOfrecording: function (callback) {
@@ -88,12 +88,12 @@ var trainningPart ={
     shell.cd('data')
     shell.cd('origin')
 
-    shell.exec('python preprocessed.py', {silent:true}).output;
+    shell.exec('python preprocessed.py', {silent:true,async:false});
 
     shell.cd('..')
     shell.cd('calculated') 
-    shell.exec('python mergeFiles.py', {silent:true}).output;
-    shell.exec('python csv2libsvm.py', {silent:true}).output;
+    shell.exec('python mergeFiles.py', {silent:true,async:false});
+    shell.exec('python csv2libsvm.py', {silent:true,async:false});
     shell.cd('..')
     shell.cd('..')
   },

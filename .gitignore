@@ -2,3 +2,8 @@
 *.csv
 *.scale
 *.predict
+*.model
+*.range
+*.out
+data/mlFiles/*.png
+data/tools/*.png
