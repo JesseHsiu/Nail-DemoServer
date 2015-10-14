@@ -11,7 +11,7 @@ String data = "";
 void setup()
 {
 //  Serial.begin(38400);
-  Serial1.begin(38400);
+  
   LWiFi.begin(); // 初始化WiFi模組
 
   if(LWiFi.connectWPA(WIFI_NAME, WIFI_PASSWD) > 0){
@@ -20,6 +20,7 @@ void setup()
   else{
 //    Serial.println("Connect fail");
   }
+  Serial1.begin(38400);
 
 }
 
