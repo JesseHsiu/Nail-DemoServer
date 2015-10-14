@@ -26,7 +26,7 @@ app.listen(3000);
 //==== Global Variables ====
 app.locals.SGs = {
   calibrationBase : [500,500,500,500,500,500,500,500,500],//500,500,500,500,500,500,500,500,500
-  currentValue : [1,1,1,1,1,1,1,1,1]
+  currentValue : [500,500,500,500,500,500,500,500,500]
 } 
 
 //self made modules
