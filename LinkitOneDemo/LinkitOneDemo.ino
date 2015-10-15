@@ -2,9 +2,9 @@
 #include<LWiFiClient.h>
 #include<HttpClient.h>
 
-#define WIFI_NAME "Lab430PrinterWifi" // 填入WiFi AP網路名稱SSID
+#define WIFI_NAME "MobileHCILabAP" // 填入WiFi AP網路名稱SSID
 #define WIFI_PASSWD "androidiphone" // 填入密碼
-#define URL "10.4.28.5"
+#define URL "192.168.1.18"
 LWiFiClient c; // 客戶端
 String data = "";
 

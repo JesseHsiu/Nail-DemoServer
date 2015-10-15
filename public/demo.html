@@ -12,10 +12,11 @@
 
     <!-- Bootstrap core CSS -->
     <link href="./css/bootstrap.min.css" rel="stylesheet">
-
+    <link href="./css/bootstrap-switch.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="./css/navbar-fixed-top.css" rel="stylesheet">
     <link href="./css/animations.css" rel="stylesheet">
+    
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -58,7 +59,7 @@
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
         <h1>Demo Page</h1>
-        <button id="startDemoBtn" type="button" class="btn btn-default btn-lg" onclick="startGesture()">Start Gesture</button>
+        <!-- <button id="startDemoBtn" type="button" class="btn btn-default btn-lg" onclick="startGesture()">Start Gesture</button> -->
         <!-- <button id="clearData" type="button" class="btn btn-danger btn-lg" onclick="clearData()">Delete Current Data</button> -->
         <button id="currentBase" type="button" class="btn btn-info btn-lg" onclick="setBase()">Set CurrentBase</button>
         <button id="testAddData" type="button" class="btn btn-default btn-lg" onclick="testAddData()">Data</button>
@@ -78,6 +79,8 @@
           <div class="col-xs-7" id="plotArea"></div>
         </div>
 
+        <p>DemoMode:</p><input type="checkbox" id="DemoMode">
+        
         <button type="button" class="btn btn-default btn-lg btn-info" onclick="upTest()">Up</button>
         <button type="button" class="btn btn-default btn-lg btn-info" onclick="rightTest()">Right</button>
         <button type="button" class="btn btn-default btn-lg btn-info" onclick="downTest()">Down</button>
@@ -96,6 +99,7 @@
     <script src="./js/d3.v3.min.js"></script>
     <script src="./js/plotly.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/bootstrap-switch.min.js"></script>
     <script src="./js/plotSGs.js"></script>
     <script src="./js/demo.js"></script>
   </body>

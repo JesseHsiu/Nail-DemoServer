@@ -29,6 +29,8 @@ app.locals.SGs = {
   currentValue : [500,500,500,500,500,500,500,500,500]
 } 
 
+app.locals.demoMode = false;
+
 //self made modules
 var trainningPart = require('./trainningPart.js');
 var predictPart = require('./predictPart.js');
@@ -114,6 +116,50 @@ app.post('/', function(req, res) {
   // res.sendStatus(200);
 });
 
+app.post('/startGesture', function(req, res) {
+  appStateMachine = stateMachine.DEMOING;
+
+  setTimeout(function () {
+    appStateMachine = stateMachine.IDLE;
+
+    predictPart.endOfrecording(function (arguments) {
+      predictPart.predictOnModel(function (predictResult) {
+        console.log("results:" + predictResult);
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.end('_testcb(\'{"message": "'+ predictResult +'"}\')');
+
+        if (appControlThing != controlThing.NONE)
+        {
+          switch (parseInt(predictResult))
+          {
+            case gestures.UP:
+              thingsToBeControlled[appControlThing].swipeUp();
+              break;
+            case gestures.RIGHT:
+              thingsToBeControlled[appControlThing].swipeRight();
+              break;
+            case gestures.DOWN:
+              thingsToBeControlled[appControlThing].swipeDown();
+              break;
+            case gestures.LEFT:
+              thingsToBeControlled[appControlThing].swipeLeft();
+              break;
+            case gestures.TAP:
+              thingsToBeControlled[appControlThing].tap();
+              break;
+            default:
+              break;
+          }
+        };
+        predictPart.clearDatas();
+
+        
+      });
+    });
+  }, 2000);
+  
+});
+
 
 
 //received from webpages.
@@ -129,11 +175,25 @@ app.get('/baseSet', function(req, res){
   res.end();
 });
 
+app.get('/changeMode/:mode', function(req, res){
+  if (req.params.mode === 'true')
+  {
+    app.locals.demoMode = true;
+  }
+  else
+  {
+    app.locals.demoMode = false;
+  }
+  console.log(app.locals.demoMode);
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end();
+});
+
 //Tranning Functions
 
 app.get('/trainning/sync', function(req, res){
   res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('_testcb(\'{"currentGesture": "'+ trainningPart.currentGesture +'", "finished" : "'+ trainningPart.finished +'", "calibrationBase" : "'+ app.locals.SGs.calibrationBase +'"}\')');
+  res.end('_testcb(\'{"currentGesture": "'+ trainningPart.currentGesture +'","demoMode" : "'+ app.locals.demoMode +'" , "finished" : "'+ trainningPart.finished +'", "calibrationBase" : "'+ app.locals.SGs.calibrationBase +'"}\')');
 });
 
 app.get('/trainning/start', function(req, res){
@@ -170,7 +230,7 @@ app.get('/trainning/reset', function(req, res){
 
 app.get('/predict/sync', function(req, res){
   res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('_testcb(\'{"currentGesture": "'+ trainningPart.currentGesture +'", "finished" : "'+ trainningPart.finished +'", "calibrationBase" : "'+ app.locals.SGs.calibrationBase +'"}\')');
+  res.end('_testcb(\'{"currentGesture": "'+ trainningPart.currentGesture +'","demoMode" : "'+ app.locals.demoMode +'" , "finished" : "'+ trainningPart.finished +'", "calibrationBase" : "'+ app.locals.SGs.calibrationBase +'"}\')');
 });
 
 app.get('/predict/start', function(req, res){

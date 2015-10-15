@@ -28,11 +28,17 @@ var watchID = undefined;
 var smartWatchControl = {
   connect: function () {
 
-    shell.exec('adb kill-server', {silent:false,async:false});
-    shell.exec('adb devices', {silent:false,async:false});
+    shell.exec('adb kill-server', {silent:false,async:true},function (code, output) {
+      shell.exec('adb devices', {silent:false,async:true},function (code, output) {
+        shell.exec('adb forward tcp:4444 localabstract:/adb-hub', {silent:false,async:true},function (code, output) {
+          shell.exec('adb connect localhost:4444', {silent:false,async:true});
+        });
+      });  
+    });
     
-    shell.exec('adb forward tcp:4444 localabstract:/adb-hub', {silent:false,async:false});
-    shell.exec('adb connect localhost:4444', {silent:false,async:true});
+    
+    
+    
 
     // watchClient.connect(android_ip_address, "5555", function () {
       
@@ -96,7 +102,7 @@ var smartWatchControl = {
     // watchRealClient.shell(watchID, watch_adb_Gesture.tap);
   },
   disconnect: function () {
-    shell.exec('adb forward --remove-all');
+    shell.exec('adb forward --remove-all',{silent:false,async:true});
     // watchRealClient.disconnect(watchID)
     // watchClient.disconnect(phoneID);
   }

@@ -19,11 +19,20 @@ $(document).ready(function() {
         timeout: 5000,
         success: function(data) {
             updatesFromResponse(data);
+            $("#DemoMode").bootstrapSwitch();
+            $("#DemoMode").on('switchChange.bootstrapSwitch', function(event, state) {
+              $.ajax({
+                    url: 'http://127.0.0.1:3000/changeMode/'+ state.toString(),
+                    cache: false,
+                    timeout: 5000
+                });
+            });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert('error ' + textStatus + " " + errorThrown);
         }
     });
+    
 });
 
 function testAddData () {
@@ -143,6 +152,11 @@ function updatesFromResponse (data) {
     {
         setShowingBase(obj.calibrationBase);    
     };
+
+    if (obj.demoMode === "true")
+    {
+        $("#DemoMode").attr('checked', 'checked');
+    }
 }
 
 function upTest () {
