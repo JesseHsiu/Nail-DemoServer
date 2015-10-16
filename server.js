@@ -399,6 +399,8 @@ app.get('/demoDevice/:device',function (req, res) {
 app.get('/demo/:gesture',function (req, res) {
   console.log("gesture: " + req.params.gesture);
 
+  clientSocket.emit('gesture', {currentGesture: req.params.gesture, color: "green"});
+
   if (appControlThing != controlThing.NONE)
   {
     switch (parseInt(req.params.gesture))
@@ -423,6 +425,9 @@ app.get('/demo/:gesture',function (req, res) {
     }
   };
 
+  setTimeout(function () {
+    clientSocket.emit('gesture', {currentGesture: gestures.NONE, color: "green"});
+  },5000);
 
   res.writeHead(200, {'Content-Type': 'text/plain'});
   res.end('_testcb(\'{"message": "ok"}\')');

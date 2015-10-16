@@ -125,7 +125,7 @@ function updatesFromSocket (data) {
     $("#instructionAnimation").removeClass();
     $("#instructionAnimation").addClass(animationCSSName[currentGesture]);
 
-    switch(currentGesture)
+    switch(parseInt(currentGesture))
     {
         case gestures.UP:
             $("#instructionText").text("You just Swiped Up").css('text-align','center');
