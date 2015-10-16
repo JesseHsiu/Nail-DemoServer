@@ -3,13 +3,22 @@ var shell = require('shelljs');
 var fs = require('fs');
 var csv = require("fast-csv");
 
+var gestures = {
+  UP: 0,
+  RIGHT: 1,
+  DOWN: 2,
+  LEFT: 3,
+  TAP: 4,
+  STOP: 5
+};
+
 //==== storing data part --- Predict ====
 var predictPart ={
   csvStream : null,
   writableStream : null,
   SGsBase : app.locals.SGs.calibrationBase,
   recordData: function(receivedString) {
-    needToStoreData = receivedString.split(" ")
+    needToStoreData = receivedString.split(" ");
     // console.log(needToStoreData)
 
 

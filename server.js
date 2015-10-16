@@ -6,6 +6,65 @@ var path = require('path');
 var shell = require('shelljs');
 var fs = require('fs');
 var csv = require("fast-csv");
+
+var socketio = require('http').createServer()
+var io = require('socket.io')(socketio);
+var clientSocket = undefined;
+
+socketio.listen(8080);
+
+// var dgram = require('dgram');
+// var net = require('net');
+// var server = net.createServer();
+
+
+// server.on('listening', function () {
+//   console.log("listening");
+// });
+
+// server.on('connection', function (socket) {
+//     //socket.pipe(socket);
+//     // Client_socket = socket;
+//     socket.on('data', function (data) {
+//         // if(data == "connection")
+//         // {
+//             console.log("connect");
+//             // ws.send('Linkit:connect');
+//         // }
+//         // if(data == "test")
+//         // {
+//             //console.log("dosomething");
+//             // console.log("Send:done");
+//             // ws.send('send');
+//             //socket.write("done");
+//         // }
+//     });
+// });
+
+
+// server.listen(8080);
+
+
+// var s = dgram.createSocket('udp4');
+
+// s.on('listening', function() {
+//   console.log("listening on " + s.address().address);
+// });
+
+// s.on('message', function(message, remote) {
+//   // console.log(message)
+//   console.log("111");
+// });
+
+// s.bind(8080, "192.168.1.18");
+
+
+
+
+
+
+
+
 module.exports = app;
 
 
@@ -62,6 +121,7 @@ var gestures = {
   DOWN: 2,
   LEFT: 3,
   TAP: 4,
+  NONE: 5
 };
 var appStateMachine = stateMachine.IDLE;
 var appControlThing = controlThing.NONE;
@@ -105,9 +165,12 @@ var handlerForNewData = function(datas) {
 
 //received from linkit one.
 app.post('/', function(req, res) {
+  // '{"currentGesture": "'+ trainningPart.currentGesture +'","demoMode" : "'+ app.locals.demoMode +'" , "finished" : "'+ trainningPart.finished +'", "calibrationBase" : "'+ app.locals.SGs.calibrationBase +'"}'
   console.log(app.locals.SGs.currentValue);
   // console.log(req.rawHeaders);
   handlerForNewData(req.headers.host);
+  clientSocket.emit('newSGValues', { values : app.locals.SGs.currentValue });
+  // clientSocket.emit('gesture', {currentGesture: gestures.NONE, color: "red"});
   // console.log(req.headers.host);
   // handlerForNewData()
   // console.log(req.body.name)
@@ -118,16 +181,17 @@ app.post('/', function(req, res) {
 
 app.post('/startGesture', function(req, res) {
   appStateMachine = stateMachine.DEMOING;
-
+  clientSocket.emit('gesture', {currentGesture: gestures.NONE, color: "red"});
   setTimeout(function () {
     appStateMachine = stateMachine.IDLE;
 
     predictPart.endOfrecording(function (arguments) {
       predictPart.predictOnModel(function (predictResult) {
         console.log("results:" + predictResult);
-        res.writeHead(200, {'Content-Type': 'text/plain'});
-        res.end('_testcb(\'{"message": "'+ predictResult +'"}\')');
-
+        // TODO :
+        // res.writeHead(200, {'Content-Type': 'text/plain'});
+        // res.end('_testcb(\'{"message": "'+ predictResult +'"}\')');
+        clientSocket.emit('gesture', {currentGesture: predictResult, color: "green"});
         if (appControlThing != controlThing.NONE)
         {
           switch (parseInt(predictResult))
@@ -152,17 +216,25 @@ app.post('/startGesture', function(req, res) {
           }
         };
         predictPart.clearDatas();
-
+        setTimeout(function () {
+          clientSocket.emit('gesture', {currentGesture: gestures.NONE, color: "green"});
+        },5000);
         
       });
     });
-  }, 2000);
+  }, 3000);
   
 });
 
 
 
 //received from webpages.
+
+io.on('connection', function (socket) {
+  console.log("newClient");
+  clientSocket = socket;
+  clientSocket.emit('newSGValues', { values : app.locals.SGs.currentValue });
+});
 
 app.get('/SGValues', function(req, res){
   res.writeHead(200, {'Content-Type': 'text/plain'});
@@ -230,7 +302,7 @@ app.get('/trainning/reset', function(req, res){
 
 app.get('/predict/sync', function(req, res){
   res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('_testcb(\'{"currentGesture": "'+ trainningPart.currentGesture +'","demoMode" : "'+ app.locals.demoMode +'" , "finished" : "'+ trainningPart.finished +'", "calibrationBase" : "'+ app.locals.SGs.calibrationBase +'"}\')');
+  res.end('_testcb(\'{"currentGesture": "'+ gestures.NONE +'","demoMode" : "'+ app.locals.demoMode +'" , "finished" : "'+ trainningPart.finished +'", "calibrationBase" : "'+ app.locals.SGs.calibrationBase +'"}\')');
 });
 
 app.get('/predict/start', function(req, res){
