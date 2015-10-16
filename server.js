@@ -24,6 +24,10 @@ server.on("error", function (err) {
 
 // var testCount = 0;
 var timeoutFunction;
+var timeoutFunction2;
+
+var controlByPhone = false;
+
 server.on("message", function (msg, rinfo) {
   clearTimeout(timeoutFunction);
   // console.log(app.locals.SGs.currentValue);
@@ -44,34 +48,41 @@ server.on("message", function (msg, rinfo) {
           // TODO :
           // res.writeHead(200, {'Content-Type': 'text/plain'});
           // res.end('_testcb(\'{"message": "'+ predictResult +'"}\')');
-          clientSocket.emit('gesture', {currentGesture: predictResult, color: "green"});
-          if (appControlThing != controlThing.NONE)
+          if (!controlByPhone)
           {
-            switch (parseInt(predictResult))
+            clientSocket.emit('gesture', {currentGesture: predictResult, color: "green"});  
+          
+          
+            if (appControlThing != controlThing.NONE)
             {
-              case gestures.UP:
-                thingsToBeControlled[appControlThing].swipeUp();
-                break;
-              case gestures.RIGHT:
-                thingsToBeControlled[appControlThing].swipeRight();
-                break;
-              case gestures.DOWN:
-                thingsToBeControlled[appControlThing].swipeDown();
-                break;
-              case gestures.LEFT:
-                thingsToBeControlled[appControlThing].swipeLeft();
-                break;
-              case gestures.TAP:
-                thingsToBeControlled[appControlThing].tap();
-                break;
-              default:
-                break;
-            }
+              switch (parseInt(predictResult))
+              {
+                case gestures.UP:
+                  thingsToBeControlled[appControlThing].swipeUp();
+                  break;
+                case gestures.RIGHT:
+                  thingsToBeControlled[appControlThing].swipeRight();
+                  break;
+                case gestures.DOWN:
+                  thingsToBeControlled[appControlThing].swipeDown();
+                  break;
+                case gestures.LEFT:
+                  thingsToBeControlled[appControlThing].swipeLeft();
+                  break;
+                case gestures.TAP:
+                  thingsToBeControlled[appControlThing].tap();
+                  break;
+                default:
+                  break;
+              }
+            };
+            
+            
+            timeoutFunction = setTimeout(function () {
+              clientSocket.emit('gesture', {currentGesture: gestures.NONE, color: "green"});
+            },5000);
           };
           predictPart.clearDatas();
-          timeoutFunction = setTimeout(function () {
-            clientSocket.emit('gesture', {currentGesture: gestures.NONE, color: "green"});
-          },5000);
           
         });
       });
@@ -478,7 +489,9 @@ app.get('/demoDevice/:device',function (req, res) {
 });
 
 app.get('/demo/:gesture',function (req, res) {
-  console.log("gesture: " + req.params.gesture);
+  clearTimeout(timeoutFunction2);
+  controlByPhone = true;
+  console.log("ok gesture: " + req.params.gesture);
 
   clientSocket.emit('gesture', {currentGesture: req.params.gesture, color: "green"});
 
@@ -506,7 +519,9 @@ app.get('/demo/:gesture',function (req, res) {
     }
   };
 
-  setTimeout(function () {
+
+  timeoutFunction2 = setTimeout(function () {
+    controlByPhone = false;
     clientSocket.emit('gesture', {currentGesture: gestures.NONE, color: "green"});
   },5000);
 
