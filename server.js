@@ -23,11 +23,60 @@ server.on("error", function (err) {
 });
 
 // var testCount = 0;
-
+var timeoutFunction;
 server.on("message", function (msg, rinfo) {
+  clearTimeout(timeoutFunction);
   // console.log(app.locals.SGs.currentValue);
   // console.log(req.rawHeaders);
-  // console.log(testCount);
+  // console.log(String(msg));
+  var receivedString = String(msg);
+  if (receivedString.indexOf("startGesture") > -1)
+  {
+    console.log("startGesture");
+    appStateMachine = stateMachine.DEMOING;
+    clientSocket.emit('gesture', {currentGesture: gestures.NONE, color: "red"});
+    setTimeout(function () {
+      appStateMachine = stateMachine.IDLE;
+
+      predictPart.endOfrecording(function (arguments) {
+        predictPart.predictOnModel(function (predictResult) {
+          console.log("results:" + predictResult);
+          // TODO :
+          // res.writeHead(200, {'Content-Type': 'text/plain'});
+          // res.end('_testcb(\'{"message": "'+ predictResult +'"}\')');
+          clientSocket.emit('gesture', {currentGesture: predictResult, color: "green"});
+          if (appControlThing != controlThing.NONE)
+          {
+            switch (parseInt(predictResult))
+            {
+              case gestures.UP:
+                thingsToBeControlled[appControlThing].swipeUp();
+                break;
+              case gestures.RIGHT:
+                thingsToBeControlled[appControlThing].swipeRight();
+                break;
+              case gestures.DOWN:
+                thingsToBeControlled[appControlThing].swipeDown();
+                break;
+              case gestures.LEFT:
+                thingsToBeControlled[appControlThing].swipeLeft();
+                break;
+              case gestures.TAP:
+                thingsToBeControlled[appControlThing].tap();
+                break;
+              default:
+                break;
+            }
+          };
+          predictPart.clearDatas();
+          timeoutFunction = setTimeout(function () {
+            clientSocket.emit('gesture', {currentGesture: gestures.NONE, color: "green"});
+          },5000);
+          
+        });
+      });
+    }, 3000);
+  };
   // testCount++;
   handlerForNewData(String(msg));
   // if (clientSocket != undefined || clientSocket != null)
