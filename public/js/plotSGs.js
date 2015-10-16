@@ -45,51 +45,51 @@ var layout = {
     r:20
   }
 };
-// window.setInterval(function(){
+window.setInterval(function(){
 
-//   $.ajax({
-//       url: 'http://127.0.0.1:3000/SGValues',
-//       dataType: "jsonp",
-//       jsonpCallback: "_SGValues",
-//       cache: false,
-//       timeout: 5000,
-//       success: function(data) {
-//         // console.log(data)
-//         obj = JSON.parse(data);
-//         var values = obj.values.split(",");
-//         // console.log(values[0])
-//           // updatesFromResponse(data);
-//         plotdata[1].y[0] = parseInt(values[0]) - plotdata[0].y[0];//- plotdata[0].y[0]
-//         plotdata[1].y[1] = parseInt(values[1]) - plotdata[0].y[1];//- plotdata[0].y[1]
-//         plotdata[1].y[2] = parseInt(values[2]) - plotdata[0].y[2];//- plotdata[0].y[2]
-//         plotdata[1].y[3] = parseInt(values[3]) - plotdata[0].y[3];//- plotdata[0].y[3]
-//         plotdata[1].y[4] = parseInt(values[4]) - plotdata[0].y[4];//- plotdata[0].y[4]
-//         plotdata[1].y[5] = parseInt(values[5]) - plotdata[0].y[5];//- plotdata[0].y[5]
-//         plotdata[1].y[6] = parseInt(values[6]) - plotdata[0].y[6];//- plotdata[0].y[6]
-//         plotdata[1].y[7] = parseInt(values[7]) - plotdata[0].y[7];//- plotdata[0].y[7]
-//         plotdata[1].y[8] = parseInt(values[8]) - plotdata[0].y[8];//- plotdata[0].y[8]
-//         Plotly.newPlot('plotArea', plotdata, layout);
-//       },
-//       error: function(jqXHR, textStatus, errorThrown) {
-//           // alert('error ' + textStatus + " " + errorThrown);
-//       }
-//   });
-// }, 100);
+  $.ajax({
+      url: 'http://127.0.0.1:3000/SGValues',
+      dataType: "jsonp",
+      jsonpCallback: "_SGValues",
+      cache: false,
+      timeout: 5000,
+      success: function(data) {
+        // console.log(data)
+        obj = JSON.parse(data);
+        var values = obj.values.split(",");
+        // console.log(values[0])
+          // updatesFromResponse(data);
+        plotdata[1].y[0] = parseInt(values[0]) - plotdata[0].y[0];//- plotdata[0].y[0]
+        plotdata[1].y[1] = parseInt(values[1]) - plotdata[0].y[1];//- plotdata[0].y[1]
+        plotdata[1].y[2] = parseInt(values[2]) - plotdata[0].y[2];//- plotdata[0].y[2]
+        plotdata[1].y[3] = parseInt(values[3]) - plotdata[0].y[3];//- plotdata[0].y[3]
+        plotdata[1].y[4] = parseInt(values[4]) - plotdata[0].y[4];//- plotdata[0].y[4]
+        plotdata[1].y[5] = parseInt(values[5]) - plotdata[0].y[5];//- plotdata[0].y[5]
+        plotdata[1].y[6] = parseInt(values[6]) - plotdata[0].y[6];//- plotdata[0].y[6]
+        plotdata[1].y[7] = parseInt(values[7]) - plotdata[0].y[7];//- plotdata[0].y[7]
+        plotdata[1].y[8] = parseInt(values[8]) - plotdata[0].y[8];//- plotdata[0].y[8]
+        Plotly.newPlot('plotArea', plotdata, layout);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+          // alert('error ' + textStatus + " " + errorThrown);
+      }
+  });
+}, 100);
 
 
-socket.on('newSGValues', function (data) {
-    var values = data.values;
-    plotdata[1].y[0] = parseInt(values[0]) - plotdata[0].y[0];//- plotdata[0].y[0]
-    plotdata[1].y[1] = parseInt(values[1]) - plotdata[0].y[1];//- plotdata[0].y[1]
-    plotdata[1].y[2] = parseInt(values[2]) - plotdata[0].y[2];//- plotdata[0].y[2]
-    plotdata[1].y[3] = parseInt(values[3]) - plotdata[0].y[3];//- plotdata[0].y[3]
-    plotdata[1].y[4] = parseInt(values[4]) - plotdata[0].y[4];//- plotdata[0].y[4]
-    plotdata[1].y[5] = parseInt(values[5]) - plotdata[0].y[5];//- plotdata[0].y[5]
-    plotdata[1].y[6] = parseInt(values[6]) - plotdata[0].y[6];//- plotdata[0].y[6]
-    plotdata[1].y[7] = parseInt(values[7]) - plotdata[0].y[7];//- plotdata[0].y[7]
-    plotdata[1].y[8] = parseInt(values[8]) - plotdata[0].y[8];//- plotdata[0].y[8]
-    Plotly.newPlot('plotArea', plotdata, layout);
-});
+// socket.on('newSGValues', function (data) {
+//     var values = data.values;
+//     plotdata[1].y[0] = parseInt(values[0]) - plotdata[0].y[0];//- plotdata[0].y[0]
+//     plotdata[1].y[1] = parseInt(values[1]) - plotdata[0].y[1];//- plotdata[0].y[1]
+//     plotdata[1].y[2] = parseInt(values[2]) - plotdata[0].y[2];//- plotdata[0].y[2]
+//     plotdata[1].y[3] = parseInt(values[3]) - plotdata[0].y[3];//- plotdata[0].y[3]
+//     plotdata[1].y[4] = parseInt(values[4]) - plotdata[0].y[4];//- plotdata[0].y[4]
+//     plotdata[1].y[5] = parseInt(values[5]) - plotdata[0].y[5];//- plotdata[0].y[5]
+//     plotdata[1].y[6] = parseInt(values[6]) - plotdata[0].y[6];//- plotdata[0].y[6]
+//     plotdata[1].y[7] = parseInt(values[7]) - plotdata[0].y[7];//- plotdata[0].y[7]
+//     plotdata[1].y[8] = parseInt(values[8]) - plotdata[0].y[8];//- plotdata[0].y[8]
+//     Plotly.newPlot('plotArea', plotdata, layout);
+// });
 
 function setBase () {
   for (var i = 0; i < 9; i++) {

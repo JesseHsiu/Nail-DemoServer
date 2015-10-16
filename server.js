@@ -13,6 +13,35 @@ var clientSocket = undefined;
 
 socketio.listen(8080);
 
+//udp
+var dgram = require("dgram");
+var server = dgram.createSocket("udp4");
+
+server.on("error", function (err) {
+  console.log("server error:\n" + err.stack);
+  server.close();
+});
+
+server.on("message", function (msg, rinfo) {
+  // console.log(app.locals.SGs.currentValue);
+  // console.log(req.rawHeaders);
+  console.log(String(msg));
+  handlerForNewData(String(msg));
+  // if (clientSocket != undefined || clientSocket != null)
+  // {
+  //   clientSocket.emit('newSGValues', { values : app.locals.SGs.currentValue });  
+  // };
+  
+});
+
+server.on("listening", function () {
+  var address = server.address();
+  console.log("server listening " +
+      address.address + ":" + address.port);
+});
+
+server.bind(8081);
+
 // var dgram = require('dgram');
 // var net = require('net');
 // var server = net.createServer();
