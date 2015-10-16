@@ -22,10 +22,13 @@ server.on("error", function (err) {
   server.close();
 });
 
+// var testCount = 0;
+
 server.on("message", function (msg, rinfo) {
   // console.log(app.locals.SGs.currentValue);
   // console.log(req.rawHeaders);
-  console.log(String(msg));
+  // console.log(testCount);
+  // testCount++;
   handlerForNewData(String(msg));
   // if (clientSocket != undefined || clientSocket != null)
   // {
