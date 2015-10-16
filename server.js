@@ -36,6 +36,7 @@ server.on("message", function (msg, rinfo) {
   var receivedString = String(msg);
   if (receivedString.indexOf("startGesture") > -1)
   {
+    controlByPhone = false;
     console.log("startGesture");
     appStateMachine = stateMachine.DEMOING;
     clientSocket.emit('gesture', {currentGesture: gestures.NONE, color: "red"});
@@ -78,15 +79,15 @@ server.on("message", function (msg, rinfo) {
             };
             
             
-            timeoutFunction = setTimeout(function () {
-              clientSocket.emit('gesture', {currentGesture: gestures.NONE, color: "green"});
-            },5000);
+            // timeoutFunction = setTimeout(function () {
+            //   clientSocket.emit('gesture', {currentGesture: gestures.NONE, color: "green"});
+            // },5000);
           };
           predictPart.clearDatas();
           
         });
       });
-    }, 3000);
+    }, 2000);
   };
   // testCount++;
   handlerForNewData(String(msg));
@@ -485,11 +486,12 @@ app.get('/demoDevice/:device',function (req, res) {
       smartWatchControl.connect();
       break;
   }
-  
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end();
 });
 
 app.get('/demo/:gesture',function (req, res) {
-  clearTimeout(timeoutFunction2);
+  // clearTimeout(timeoutFunction2);
   controlByPhone = true;
   console.log("ok gesture: " + req.params.gesture);
 
@@ -520,10 +522,10 @@ app.get('/demo/:gesture',function (req, res) {
   };
 
 
-  timeoutFunction2 = setTimeout(function () {
-    controlByPhone = false;
-    clientSocket.emit('gesture', {currentGesture: gestures.NONE, color: "green"});
-  },5000);
+  // timeoutFunction2 = setTimeout(function () {
+  //   controlByPhone = false;
+  //   clientSocket.emit('gesture', {currentGesture: gestures.NONE, color: "green"});
+  // },5000);
 
   res.writeHead(200, {'Content-Type': 'text/plain'});
   res.end('_testcb(\'{"message": "ok"}\')');
